@@ -76,8 +76,6 @@ namespace SecondOrderCurve
             }
             // Adding polyline to canvas
             DrawingCanvas.Children.Add(polyline);
-
-            MessageBox.Show($"Values of x and y are {testPolyline.Points}");
         }
 
         private decimal Scaling(decimal a, decimal b, decimal c)
