@@ -74,8 +74,6 @@ namespace SecondOrderCurve
             }
             // Adding polyline to canvas
             DrawingCanvas.Children.Add(polyline);
-
-            MessageBox.Show($"Points are {polyline.Points}");
         }
 
         private double Scaling(double a, double b, double c)
@@ -124,8 +122,6 @@ namespace SecondOrderCurve
                 yMaxValue.Content = (int)doubles.Max();
                 yMinValue.Content = (int)-doubles.Max();
             }
-
-            MessageBox.Show($"Max is {max} min is {min}");
 
             // Adding labels to scale on Canvas
             DrawingCanvas.Children.Add(yMinValue);
