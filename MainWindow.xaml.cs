@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,16 +29,16 @@ namespace SecondOrderCurve
         private void DrawCurve(object sender, RoutedEventArgs e)
         {
             // Getting user's input
-            double a;
-            double b;
-            double c;
-            bool aCheck = Double.TryParse(ValueA.Text, out a);
-            bool bCheck = Double.TryParse(ValueB.Text, out b);
-            bool cCheck = Double.TryParse(ValueC.Text, out c);
+            decimal a;
+            decimal b;
+            decimal c;
+            bool aCheck = Decimal.TryParse(ValueA.Text, out a);
+            bool bCheck = Decimal.TryParse(ValueB.Text, out b);
+            bool cCheck = Decimal.TryParse(ValueC.Text, out c);
 
             // Getting Canvas' height and width
-            double canvasHeight = DrawingCanvas.Height;
-            double canvasWidth = DrawingCanvas.Width;
+            decimal canvasHeight = (decimal)DrawingCanvas.Height;
+            decimal canvasWidth = (decimal)DrawingCanvas.Width;
 
             // Checking if there are any values
             if (a == 0 || b==0 || c==0) 
@@ -61,36 +61,40 @@ namespace SecondOrderCurve
             polyline.StrokeThickness = 2;
             polyline.Name = "Curve";
 
-            double yScale = Scaling(a, b, c);
+            decimal yScale = Scaling(a, b, c);
+
+            Polyline testPolyline = new Polyline();
 
             // Drawing the polyline
-            for (double x = -4;  x <= 3; x += 0.1d)
+            for (decimal x = -4;  x <= 4; x += 0.1m)
             {
-                double y = a*x*x + b*x +c;
+                decimal y = a*x*x + b*x +c;
                 // Scaling according to fixed 300px x 300px Canvas and for arbitrary values of X (from -4 to + 3)
                 // As well as for maximum and minimum Y values using Scaling method, defined below
-                polyline.Points.Add(new Point(((x + 4) / 7) * canvasWidth, canvasHeight/2 - (y * yScale)));
-              
+                polyline.Points.Add(new Point((double)(((x + 4) / 8) * canvasWidth), (double)(canvasHeight/2 - (y * yScale))));
+                testPolyline.Points.Add(new Point((double)x,(double)y));
             }
             // Adding polyline to canvas
             DrawingCanvas.Children.Add(polyline);
+
+            MessageBox.Show($"Values of x and y are {testPolyline.Points}");
         }
 
-        private double Scaling(double a, double b, double c)
+        private decimal Scaling(decimal a, decimal b, decimal c)
         {
             // Creating a list to find max and min Y values
-            List<double> yValues = new List<double>();
-            for (double x = -4; x <= 3; x += 0.1d)
+            List<decimal> yValues = new List<decimal>();
+            for (decimal x = -4; x <= 4; x += 0.1m)
             {
-                double y = a * x * x + b * x + c;
+                decimal y = a * x * x + b * x + c;
                 yValues.Add(y);
             }
 
             // Assigning variables
-            double max = yValues.Max();
-            double min = yValues.Min();
-            List<double> doubles = new List<double> { Math.Abs(min), Math.Abs(max) };
-            double scale = 1d;
+            decimal max = yValues.Max();
+            decimal min = yValues.Min();
+            List<decimal> decimals = new List<decimal> { Math.Abs(min), Math.Abs(max) };
+            decimal scale = 1m;
 
             // Creating labels for Canvas Y values Scale
             Label yMaxValue = new Label();
@@ -117,10 +121,10 @@ namespace SecondOrderCurve
             }
             else if(max > 0 && min < 0)
             {
-                scale = 300 / (doubles.Max()*2);
+                scale = 300 / (decimals.Max()*2);
 
-                yMaxValue.Content = (int)doubles.Max();
-                yMinValue.Content = (int)-doubles.Max();
+                yMaxValue.Content = (int)decimals.Max();
+                yMinValue.Content = (int)-decimals.Max();
             }
 
             // Adding labels to scale on Canvas
@@ -166,7 +170,7 @@ namespace SecondOrderCurve
 
             // X Scale - Max value
             Label xMaxLabel = new Label();
-            xMaxLabel.Content = "3";
+            xMaxLabel.Content = "4";
             Canvas.SetLeft(xMaxLabel, 300);
             Canvas.SetTop(xMaxLabel, 150);
 
